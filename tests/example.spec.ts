@@ -1,14 +1,15 @@
 import { test, expect } from '@playwright/test';
+const data = require('../tests/data/testdata.json')
 
 test('Browse herokuapp', async ({ page }) => {
-  await page.goto('https://the-internet.herokuapp.com/');
+  await page.goto(data.Test1.url);
 
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/The Internet/);
 });
 
 test('Clicking on elements', async ({ page }) => {
-  await page.goto('https://the-internet.herokuapp.com/add_remove_elements/');
+  await page.goto(data.Test1.url+'/add_remove_elements/');
 
   await page.getByRole('button',{name:'ADD Element'})
 
@@ -20,7 +21,7 @@ test('Clicking on elements', async ({ page }) => {
 
 
 test('Selecting Dropdown', async ({ page }) => {
-  await page.goto('https://the-internet.herokuapp.com/dropdown');
+  await page.goto(data.Test1.url+'/dropdown');
 
   await page.selectOption('#dropdown', '1');
 
@@ -28,7 +29,7 @@ test('Selecting Dropdown', async ({ page }) => {
 
 
 test('enter value in textbox', async ({ page }) => {
-    await page.goto('https://the-internet.herokuapp.com/inputs');
+    await page.goto(data.Test1.url+'/inputs');
   
     await page.locator("//input[@type='number']").fill('5');
 
@@ -36,7 +37,7 @@ test('enter value in textbox', async ({ page }) => {
 
 
 test('select checkbox', async ({ page }) => {
-  await page.goto('https://the-internet.herokuapp.com/checkboxes');
+  await page.goto(data.Test1.url+'/checkboxes');
 
     // Get the checkboxes using getByRole
     const checkboxes = page.getByRole('checkbox');
@@ -48,7 +49,7 @@ test('select checkbox', async ({ page }) => {
 });
 
 test('Enter forget password', async ({ page }) => {
-  await page.goto('https://the-internet.herokuapp.com/forgot_password');
+  await page.goto(data.Test1.url+'/forgot_password');
 
   await page.getByLabel('E-mail').fill('test@example.com');
 
@@ -65,12 +66,12 @@ test('I authentecate with basic auth', async ({ page }) => {
   const passwprd='admin';
   const authheader='Basic ' + btoa(username+':'+passwprd);
   await page.setExtraHTTPHeaders({Authorization : authheader});
-  await page.goto('https://the-internet.herokuapp.com/basic_auth');
+  await page.goto(data.Test1.url+'/basic_auth');
 });
 
 
 test('scroll down test ', async ({ page }) => {
-  await page.goto('https://the-internet.herokuapp.com/infinite_scroll');
+  await page.goto(data.Test1.url+'/infinite_scroll');
   const element =  page.locator('//a[text()="Elemental Selenium"]');
   let i = 0;
   while (i < 5) {
@@ -82,19 +83,3 @@ test('scroll down test ', async ({ page }) => {
 
 });
     
-
-
-
-test('Drag and drop ', async ({ page }) => {
-  await page.goto('https://the-internet.herokuapp.com/drag_and_drop');
-  await page.locator('//div[@id="column-a"]').dragTo(page.locator('//div[@id="column-b"]'));
-await page.pause();
-});
-    
-
-test('File Upload', async ({ page }) => {
-  await page.goto('https://the-internet.herokuapp.com/upload');
-  await page.locator('//input[@id="file-submit"]').setInputFiles('tests/upload/invoicesample.pdf')
-  await page.getByRole('button',{name: 'Upload'}).click()
-
-});
